@@ -189,6 +189,8 @@ export type GCMinorCompletedData = {|
   // The number of cells tenured (since
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1473213)
   cells_tenured?: number,
+  // The number of strings tenured
+  strings_tenured?: number,
 
   // The numbers of cells allocated since the previous minor GC.
   // These were added in
@@ -221,6 +223,8 @@ export type GCMinorCompletedData = {|
 
   // Added in https://bugzilla.mozilla.org/show_bug.cgi?id=1507379
   groups_pretenured?: number,
+
+  nursery_string_realms_disabled?: number,
 
   phase_times: PhaseTimes<Microseconds>,
 |};

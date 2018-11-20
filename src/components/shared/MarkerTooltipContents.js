@@ -431,6 +431,13 @@ function getMarkerDetails(
                         )
                       )
                     : null}
+                  {nursery.strings_tenured
+                    ? _markerDetail(
+                      'gcpromotionstrings',
+                      'Strings evicted',
+                      nursery.strings_tenured,
+                      formatNumber)
+                    : null}
                   {nursery.cur_capacity
                     ? _markerDetail(
                         'gcnurseryusage',
@@ -501,6 +508,14 @@ function getMarkerDetails(
                         'gcpretenured',
                         'Number of groups to pretenure',
                         nursery.groups_pretenured,
+                        x => formatNumber(x, 2, 0)
+                      )
+                    : null}
+                  {nursery.nursery_string_realms_disabled
+                    ? _markerDetail(
+                        'gcnurserystringrealmsdisabled',
+                        'Nursery string realms disabled',
+                        nursery.nursery_string_realms_disabled,
                         x => formatNumber(x, 2, 0)
                       )
                     : null}
