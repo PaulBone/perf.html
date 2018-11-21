@@ -8,7 +8,12 @@ import type {
   RawMarkerTable,
   IndexIntoStringTable,
 } from '../types/profile';
-import type { Marker } from '../types/profile-derived';
+import type {
+  Marker,
+  GCMinorMarker,
+  GCSliceMarker,
+  GCMajorMarker,
+} from '../types/profile-derived';
 import type { BailoutPayload, ScreenshotPayload } from '../types/markers';
 import type { StartEndRange } from '../types/units';
 import type { UniqueStringArray } from '../utils/unique-string-array';
@@ -357,6 +362,16 @@ export function isNetworkMarker(marker: Marker): boolean {
   return !!(marker.data && marker.data.type === 'Network');
 }
 
+function isGCMinorMarker(marker: Marker): boolean {
+  return !!marker.data && marker.data.type === 'GCMinor';
+}
+function isGCSliceMarker(marker: Marker): boolean {
+  return !!marker.data && marker.data.type === 'GCSlice';
+}
+function isGCMajorMarker(marker: Marker): boolean {
+  return !!marker.data && marker.data.type === 'GCMajor';
+}
+
 export function filterForNetworkChart(markers: Marker[]) {
   return markers.filter(marker => isNetworkMarker(marker));
 }
@@ -364,6 +379,17 @@ export function filterForNetworkChart(markers: Marker[]) {
 export function filterForMarkerChart(markers: Marker[]) {
   return markers.filter(marker => !isNetworkMarker(marker));
 }
+
+export function filterGCMinor(markers: Marker[]): GCMinorMarker[] {
+  return (markers.filter(marker => isGCMinorMarker(marker)): any);
+}
+export function filterGCSlice(markers: Marker[]): GCSliceMarker[] {
+  return (markers.filter(marker => isGCSliceMarker(marker)): any);
+}
+export function filterGCMajor(markers: Marker[]): GCMajorMarker[] {
+  return (markers.filter(marker => isGCMajorMarker(marker)): any);
+}
+
 // Firefox emits separate start and end markers for each load. It does this so that,
 // if a profile is collected while a request is in progress, the profile will still contain
 // a start marker for that request. So by looking at start markers we can get
