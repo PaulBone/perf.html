@@ -43,6 +43,7 @@ describe('app/DetailsContainer', function() {
     'marker-table': true,
     'network-chart': false,
     'js-tracer': false,
+    'gc-stats': false,
   };
 
   it('renders an initial view with a sidebar', () => {

@@ -214,6 +214,8 @@ export function urlStateToUrlObject(urlState: UrlState): UrlObject {
         ? null
         : undefined;
       break;
+    case 'gc-stats':
+      break;
     default:
       assertExhaustiveCheck(selectedTab);
   }
