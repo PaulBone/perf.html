@@ -150,6 +150,19 @@ export function getMarkerSelectorsPerThread(threadSelectors: *) {
     }
   );
 
+  const getPreviewFilteredGCMinorMarkers = createSelector(
+    getPreviewFilteredMarkers,
+    MarkerData.filterGCMinor
+  );
+  const getPreviewFilteredGCSliceMarkers = createSelector(
+    getPreviewFilteredMarkers,
+    MarkerData.filterGCSlice
+  );
+  const getPreviewFilteredGCMajorMarkers = createSelector(
+    getPreviewFilteredMarkers,
+    MarkerData.filterGCMajor
+  );
+
   const getIsNetworkChartEmptyInFullRange: Selector<boolean> = createSelector(
     getReferenceMarkerTable,
     markers => markers.filter(MarkerData.isNetworkMarker).length === 0
@@ -224,6 +237,9 @@ export function getMarkerSelectorsPerThread(threadSelectors: *) {
     getRangeFilteredScreenshotsById,
     getSearchFilteredMarkers,
     getPreviewFilteredMarkers,
+    getPreviewFilteredGCMinorMarkers,
+    getPreviewFilteredGCSliceMarkers,
+    getPreviewFilteredGCMajorMarkers,
     getSelectedMarkerIndex,
     getIsNetworkChartEmptyInFullRange,
   };

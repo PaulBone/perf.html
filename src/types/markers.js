@@ -501,3 +501,8 @@ export type MarkerPayload_Gecko =
   | $ReplaceCauseWithStack<StyleMarkerPayload>
   // Payloads can be null.
   | null;
+
+export type GCMarkerPayload =
+  | GCMinorMarkerPayload
+  | GCMajorMarkerPayload
+  | GCSliceMarkerPayload;
