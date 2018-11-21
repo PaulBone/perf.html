@@ -26,6 +26,7 @@ jest.mock('../../components/marker-chart', () => 'marker-chart');
 jest.mock('../../components/marker-table', () => 'marker-table');
 jest.mock('../../components/network-chart', () => 'network-chart');
 jest.mock('../../components/js-tracer', () => 'js-tracer');
+jest.mock('../../components/gc-stats', () => 'gc-stats');
 
 describe('app/Details', function() {
   function setup() {

@@ -195,6 +195,8 @@ export function urlStateToUrlObject(urlState: UrlState): UrlObject {
     case 'js-tracer':
       query.summary = urlState.profileSpecific.showJsTracerSummary;
       break;
+    case 'gc-stats':
+      break;
     default:
       assertExhaustiveCheck(selectedTab);
   }

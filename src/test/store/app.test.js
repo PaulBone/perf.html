@@ -74,6 +74,7 @@ describe('app actions', function() {
         'stack-chart',
         'marker-chart',
         'marker-table',
+        'gc-stats',
       ]);
     });
 
@@ -87,6 +88,7 @@ describe('app actions', function() {
         'marker-chart',
         'marker-table',
         'network-chart',
+        'gc-stats',
       ]);
     });
 
@@ -100,6 +102,7 @@ describe('app actions', function() {
         'marker-chart',
         'marker-table',
         'js-tracer',
+        'gc-stats',
       ]);
     });
   });
