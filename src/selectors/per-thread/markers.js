@@ -8,13 +8,17 @@ import * as UrlState from '../url-state';
 import * as MarkerData from '../../profile-logic/marker-data';
 import * as MarkerTiming from '../../profile-logic/marker-timing';
 import * as ProfileSelectors from '../profile';
+import * as GCAnalysis from '../../profile-logic/gc-analysis';
 
 import type {
   SamplesTable,
   RawMarkerTable,
   IndexIntoRawMarkerTable,
 } from '../../types/profile';
-import type { Marker, MarkerTimingRows } from '../../types/profile-derived';
+import type {
+  Marker,
+  MarkerTimingRows,
+} from '../../types/profile-derived';
 import type { Selector } from '../../types/store';
 import type { $ReturnType } from '../../types/utils';
 import type { Milliseconds } from '../../types/units';
@@ -134,6 +138,12 @@ export function getMarkerSelectorsPerThread(threadSelectors: *) {
     getPreviewFilteredMarkers,
     MarkerData.filterGCMajor
   );
+  const getPreviewFilteredGCStats = createSelector(
+    getPreviewFilteredGCMinorMarkers,
+    getPreviewFilteredGCSliceMarkers,
+    getPreviewFilteredGCMajorMarkers,
+    GCAnalysis.computeGCStats
+  );
 
   const getIsNetworkChartEmptyInFullRange: Selector<boolean> = createSelector(
     getMarkers,
@@ -228,6 +238,7 @@ export function getMarkerSelectorsPerThread(threadSelectors: *) {
     getPreviewFilteredGCMinorMarkers,
     getPreviewFilteredGCSliceMarkers,
     getPreviewFilteredGCMajorMarkers,
+    getPreviewFilteredGCStats,
     getSelectedMarkerIndex,
     getIsNetworkChartEmptyInFullRange,
   };
