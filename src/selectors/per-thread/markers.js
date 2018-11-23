@@ -14,10 +14,7 @@ import type {
   RawMarkerTable,
   IndexIntoRawMarkerTable,
 } from '../../types/profile';
-import type {
-  Marker,
-  MarkerTimingRows,
-} from '../../types/profile-derived';
+import type { Marker, MarkerTimingRows } from '../../types/profile-derived';
 import type { Selector } from '../../types/store';
 import type { $ReturnType } from '../../types/utils';
 import type { Milliseconds } from '../../types/units';
