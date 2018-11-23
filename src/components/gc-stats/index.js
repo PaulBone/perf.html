@@ -10,11 +10,7 @@ import type {
   ConnectedProps,
 } from '../../utils/connect';
 
-import type {
-  GCMinorMarker,
-  GCSliceMarker,
-  GCMajorMarker,
-} from '../../types/profile-derived';
+import type { GCStats } from '../../types/profile-derived';
 
 import type { PreviewSelection } from '../../types/actions';
 import { selectedThreadSelectors } from '../../selectors/per-thread';
@@ -23,25 +19,23 @@ import { getPreviewSelection } from '../../selectors/profile';
 type DispatchProps = {||};
 
 type StateProps = {|
-  +minorMarkers: GCMinorMarker[],
-  +sliceMarkers: GCSliceMarker[],
-  +majorMarkers: GCMajorMarker[],
+  +gcStats: GCStats,
   +previewSelection: PreviewSelection,
 |};
 
 type Props = ConnectedProps<{||}, StateProps, DispatchProps>;
 
-class GCStats extends React.PureComponent<Props> {
+class GCStatsView extends React.PureComponent<Props> {
   render() {
-    const { minorMarkers, sliceMarkers, majorMarkers } = this.props;
+    const { gcStats } = this.props;
 
     return (
       <div className="gcStats">
-        Number of minors: {minorMarkers.length}
+        Number of minors: {gcStats.numMinor}
         <br />
-        Number of slices: {sliceMarkers.length}
+        Number of slices: {gcStats.numSlice}
         <br />
-        Number of majors: {majorMarkers.length}
+        Number of majors: {gcStats.numMajor}
         <br />
       </div>
     );
@@ -51,19 +45,11 @@ class GCStats extends React.PureComponent<Props> {
 const options: ExplicitConnectOptions<{||}, StateProps, DispatchProps> = {
   mapStateToProps: state => {
     return {
-      minorMarkers: selectedThreadSelectors.getPreviewFilteredGCMinorMarkers(
-        state
-      ),
-      sliceMarkers: selectedThreadSelectors.getPreviewFilteredGCSliceMarkers(
-        state
-      ),
-      majorMarkers: selectedThreadSelectors.getPreviewFilteredGCMajorMarkers(
-        state
-      ),
+      gcStats: selectedThreadSelectors.getPreviewFilteredGCStats(state),
       previewSelection: getPreviewSelection(state),
     };
   },
-  component: GCStats,
+  component: GCStatsView,
 };
 
 export default explicitConnect(options);
