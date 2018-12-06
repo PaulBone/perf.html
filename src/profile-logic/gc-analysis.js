@@ -48,6 +48,7 @@ export function computeGCStats(
   majorMarkers: GCMajorMarker[]
 ): GCStats {
   return {
+    minorMarkers: minorMarkers,
     minorPauses: pauseInfo(_toDurations(minorMarkers)),
     slicePauses: pauseInfo(_toDurations(sliceMarkers)),
     allPauses: pauseInfo(

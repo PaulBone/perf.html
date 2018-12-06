@@ -183,6 +183,7 @@ export type PauseInfo = {|
 |};
 
 export type GCStats = {|
+  +minorMarkers: GCMinorMarker[],
   +minorPauses: PauseInfo | null,
   +slicePauses: PauseInfo | null,
   +allPauses: PauseInfo | null,
