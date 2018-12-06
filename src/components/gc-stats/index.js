@@ -9,17 +9,24 @@ import type {
   ExplicitConnectOptions,
   ConnectedProps,
 } from '../../utils/connect';
-import type { PauseInfo, GCStats } from '../../types/profile-derived';
+import type {
+  PauseInfo,
+  GCStats,
+  GCMinorMarker,
+} from '../../types/profile-derived';
 
 import type { PreviewSelection } from '../../types/actions';
 import { selectedThreadSelectors } from '../../selectors/per-thread';
 import {
   getPreviewSelection,
   getProfileInterval,
+  getZeroAt,
 } from '../../selectors/profile';
 import {
   formatMilliseconds,
+  formatSeconds,
   formatNumber,
+  formatBytes,
   formatValueTotal,
 } from '../../utils/format-numbers';
 import type { Milliseconds, StartEndRange } from '../../types/units';
@@ -31,9 +38,56 @@ type StateProps = {|
   +gcStats: GCStats,
   +previewSelection: PreviewSelection,
   +timeRange: StartEndRange,
+  +zeroAt: Milliseconds,
 |};
 
 type Props = ConnectedProps<{||}, StateProps, DispatchProps>;
+
+function _nurseryMemory(markers: GCMinorMarker[], zeroAt: number): React.Node {
+  if (!markers.some(m => m.data.nursery)) {
+    return null;
+  }
+
+  return (
+    <div>
+      <p>Nursery memory information:</p>
+      <table>
+        <tr>
+          <th>Time</th>
+          <th>Tenured</th>
+          <th>Used</th>
+          <th>Lazy</th>
+          <th>Capacity</th>
+        </tr>
+        {markers.map(m => {
+          const time = <td>{formatSeconds(m.start - zeroAt)}</td>;
+
+          if (m.data.nursery && m.data.nursery.status === 'complete') {
+            const nursery = m.data.nursery;
+            return (
+              <tr key={m.start}>
+                {time}
+                <td>{formatBytes(nursery.bytes_tenured)}</td>
+                <td>{formatBytes(nursery.bytes_used)}</td>
+                <td>
+                  {nursery.lazy_capacity
+                    ? formatBytes(nursery.lazy_capacity)
+                    : null}
+                </td>
+                <td>
+                  {nursery.cur_capacity
+                    ? formatBytes(nursery.cur_capacity)
+                    : null}
+                </td>
+              </tr>
+            );
+          }
+          return <tr key={m.start}>{time}</tr>;
+        })}
+      </table>
+    </div>
+  );
+}
 
 function _pauseInfoView(
   name: string,
@@ -83,12 +137,13 @@ function _pauseInfoView(
 
 class GCStatsView extends React.PureComponent<Props> {
   render() {
-    const { gcStats, timeRange } = this.props;
+    const { gcStats, timeRange, zeroAt } = this.props;
 
     const totalTime = timeRange.end - timeRange.start;
 
     return (
       <div className="gcStats">
+        {_nurseryMemory(gcStats.minorMarkers, zeroAt)}
         {_pauseInfoView('Nursery collections', gcStats.minorPauses, totalTime)}
         {_pauseInfoView('Major slices', gcStats.slicePauses, totalTime)}
         {_pauseInfoView('All pauses', gcStats.allPauses, totalTime)}
@@ -108,6 +163,7 @@ const options: ExplicitConnectOptions<{||}, StateProps, DispatchProps> = {
         selectedThreadSelectors.getPreviewFilteredThread(state),
         getProfileInterval(state)
       ),
+      zeroAt: getZeroAt(state),
     };
   },
   component: GCStatsView,
