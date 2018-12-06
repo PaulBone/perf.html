@@ -32,6 +32,8 @@ import {
 import type { Milliseconds, StartEndRange } from '../../types/units';
 import * as ProfileData from '../../profile-logic/profile-data';
 
+require('./index.css');
+
 type DispatchProps = {||};
 
 type StateProps = {|
@@ -143,12 +145,17 @@ class GCStatsView extends React.PureComponent<Props> {
 
     return (
       <div className="gcStats">
+        <div>
+          {_pauseInfoView(
+            'Nursery collections',
+            gcStats.minorPauses,
+            totalTime
+          )}
+          {_pauseInfoView('Major slices', gcStats.slicePauses, totalTime)}
+          {_pauseInfoView('All pauses', gcStats.allPauses, totalTime)}
+          Number of majors: {gcStats.numMajor}
+        </div>
         {_nurseryMemory(gcStats.minorMarkers, zeroAt)}
-        {_pauseInfoView('Nursery collections', gcStats.minorPauses, totalTime)}
-        {_pauseInfoView('Major slices', gcStats.slicePauses, totalTime)}
-        {_pauseInfoView('All pauses', gcStats.allPauses, totalTime)}
-        Number of majors: {gcStats.numMajor}
-        <br />
       </div>
     );
   }
